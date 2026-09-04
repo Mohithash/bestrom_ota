@@ -1,16 +1,3 @@
 {
-  "response": [
-    {
-      "maintainer": "BestROM",
-      "oem": "Xiaomi",
-      "device": "POCO F6 / Redmi Turbo 3",
-      "filename": "PLACEHOLDER-no-ota-yet.zip",
-      "download": "https://github.com/Mohithash/bestrom_ota/releases",
-      "timestamp": 0,
-      "md5": "00000000000000000000000000000000",
-      "size": 0,
-      "version": "0.0.0-placeholder",
-      "changelog": "Placeholder OTA catalog for BestROM peridot (A16). No installable build published yet."
-    }
-  ]
+  "response": []
 }
