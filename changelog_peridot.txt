@@ -1,3 +1,40 @@
+3.0-peridot-20260906-1558-OFFICIAL
+==================================
+
+Camera
+  * MiuiCamera is gone. It was the single largest item in the ROM (a 187 MB
+    APK plus helper libraries) and it had a real bug: after a shot, its
+    post-processing was killed once you left the app, so the photo stayed
+    as a hidden pending MediaStore row and only appeared in the gallery at
+    the NEXT camera launch, written from the thumbnail at low quality.
+    Aperture (the stock LineageOS camera) is the camera app again; Glimpse
+    remains the gallery. Xiaomi's HDR/night/portrait processing goes with
+    MiuiCamera; Aperture uses the vendor camera HAL directly.
+  * Aperture is set up exactly as LineageOS 23.2 does for peridot: the
+    ultrawide is exposed as a separate lens next to the main camera and the
+    front camera, and 60 fps video is available on both (up to 4K on the
+    back). A second, redundant 1x back-lens button may show up because the
+    HAL also exposes the main sensor standalone; hiding it needs an
+    on-device measurement and will follow.
+
+Sound & vibration
+  * Ships silent. Off by default: dial pad tones, touch sounds, screen
+    locking sound, charging sound, charging vibration, touch feedback, and
+    the ring, notification, alarm and media vibration intensities (the
+    sliders stay, so any of it can be turned back on). Screenshot sound is
+    off by default too.
+  * The on/off toggles are first-boot seeds: they apply on a clean flash;
+    a dirty flash keeps the values you already have. The vibration
+    intensities and the screenshot sound apply on a dirty flash as well,
+    unless you had already moved that slider or switch.
+  * Accessibility haptics and the hardware haptics (power button,
+    fingerprint) are untouched.
+
+Freezer
+  * The camera and gallery apps can no longer be frozen, so "open gallery
+    from the camera" and "take a photo" from other apps keep working.
+
+
 BestROM 3.0 for POCO F6 (peridot)
 =================================
 
