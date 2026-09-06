@@ -1,42 +1,13 @@
 # bestrom_ota
 
-OTA JSON catalog for BestROM.
+OTA catalog for the BestROM Updater.
 
-- Branch `16` — Android 16 / BestROM A16 channel
-- Branch `17` — Android 17 / BestROM A17 channel (VoltageOS 17 base)
+- Branch `16` — Android 16 channel (retired)
+- Branch `17` — Android 17 channel: `peridot.json` (POCO F6 / Redmi Turbo 3) and `changelog_peridot.txt`
 
-The in-ROM updater fetches
-`https://raw.githubusercontent.com/Mohithash/bestrom_ota/<branch>/<device>.json`,
-set by a build-time resource overlay in
-`vendor/bestrom/overlay/common/packages/apps/Updater/`. The changelog, if
-present, is read from `changelog_<device>.txt` alongside it.
+The in-ROM Updater fetches `https://raw.githubusercontent.com/Mohithash/bestrom_ota/17/<device>.json`
+and `changelog_<device>.txt`. Each entry in `response` needs `filename`, `download` (a public URL to the
+full zip), `size` (bytes), `timestamp` (unix seconds) and `version`. The catalog is empty until a build is
+hosted somewhere the phone can download 2.7 GB from; until then the Updater reports the device as up to date.
 
-## Schema
-
-`packages/apps/Updater/app/src/main/java/com/voltage/updater/misc/Utils.java:86-95`
-reads each entry with `getLong`/`getString`, not the `opt` variants, so **all
-six fields are mandatory** — a missing one throws and the whole feed fails to
-parse:
-
-```json
-{
-  "response": [
-    {
-      "timestamp": 1757000000,
-      "filename": "BestROM-1.0-peridot-20260904-1042-UNOFFICIAL.zip",
-      "md5": "<md5 of the zip>",
-      "size": 1234567890,
-      "download": "https://.../BestROM-1.0-peridot-....zip",
-      "version": "1.0"
-    }
-  ]
-}
-```
-
-`timestamp` is compared against the device's `ro.build.date.utc`
-(`Utils.java:97-104`): an entry at or below it is discarded as "older than the
-current build". So it must be the real build timestamp of the zip, and a
-zero/placeholder entry is silently ignored rather than offered.
-
-An empty `response` array is the correct state when no build has been
-published — it parses cleanly and offers nothing.
+Official builds and their sha256 are listed in the changelog.
