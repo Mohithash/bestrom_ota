@@ -1,3 +1,36 @@
+3.0-peridot-20260907-0458-OFFICIAL
+==================================
+
+Camera
+  * MiuiCamera is back as the only camera; Aperture is removed. The
+    "photo not in the gallery" bug is fixed at its root: Android 17 runs
+    platform-signed apps in a new SELinux domain, so every rule the
+    MiuiCamera port carried was dead. The one that mattered blocked the
+    app from handing the camera HAL its background-service callback, so
+    MIVI post-processing never reported "done", the photo stayed as a
+    hidden pending MediaStore row, and the next camera launch wrote a
+    thumbnail-sized copy. The rules are rewritten for both domains: the
+    callback registers, shots land in DCIM at full size within seconds,
+    and Glimpse shows them immediately.
+  * The camera's other denied reads are granted too (vendor camera,
+    display and audio properties; PSI pressure files; camera tuning data
+    and DSP directories), and the camera provider's own gaps are closed
+    (GPU devfreq link, an AI-image-enhancement property relabel, a dead
+    QSPM probe silenced). Two Xiaomi-only service lookups that peridot
+    does not ship are labelled so they fail cleanly instead of tripping
+    a neverallow.
+  * Expected and harmless, not chased: the "com.miui.gallery not found"
+    line (the hand-off falls through to Glimpse) and the missing
+    com.xiaomi.scanner (the document-scan feature hides itself).
+
+Sound & vibration
+  * Unchanged from 1558: silent by default (first-boot seeds), vibration
+    intensities and screenshot sound off.
+
+Freezer
+  * Unchanged from 1558: the camera and gallery apps cannot be frozen.
+
+
 3.0-peridot-20260906-1558-OFFICIAL
 ==================================
 
