@@ -1,3 +1,26 @@
+3.0-peridot-20260907-1010-OFFICIAL
+==================================
+
+Detection / stock parity
+  * SELinux: dropped a VoltageOS-added rule that granted CAP_SYS_ADMIN to the
+    fsck_untrusted domain. AOSP forbids this (it calls the grant "a code
+    mistake" and neverallows it), so stock and every other peridot ROM deny
+    it - our ROM was the odd one out, and Duck Detector flagged the live
+    policy as dirty. The grant is removed and the stock neverallow restored,
+    so the check now reads DENIED like stock. (Removable USB-OTG storage that
+    needs a userspace exFAT/NTFS repair is the one thing to sanity-check; the
+    F6 has no SD slot and the 6.1 kernel mounts exFAT/NTFS itself.)
+  * sys.oem_unlock_allowed is no longer fabricated. Our Play-Integrity property
+    spoof used to hardcode it to 0; nothing in the ROM reads it, and inventing
+    it only gave detection tools a property to flag. It is now absent, the
+    stock-like state. (The bootloader-unlock verdict is attested by the TEE and
+    is unaffected by any property.)
+
+Camera / Sound / Freezer
+  * Unchanged from 2026-09-07-0458 (MiuiCamera restored with the Android 17
+    SELinux fix; Sound & vibration silent by default; camera/gallery unfreezable).
+
+
 3.0-peridot-20260907-0458-OFFICIAL
 ==================================
 
