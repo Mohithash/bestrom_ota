@@ -1,3 +1,168 @@
+3.0-peridot-20260908-2346-OFFICIAL
+==================================
+
+Changes since 2026-09-07-1010
+-----------------------------
+This note covers everything new since the 2026-09-07-1010 release.
+
+Agent mode
+  * BestROM can now carry out a task you type, on its own, with nothing
+    plugged in: Settings > Custom Tweaks > Advanced > Agent mode. It
+    reads the screen, decides the next step and does it, one step at a
+    time, until it is done or you stop it. A computer can drive the same
+    bridge over adb.
+  * It is off by default, and while it is off it costs nothing: no
+    service, no process, nothing at boot. It turns itself off again when
+    the phone restarts - it does not survive a reboot.
+  * The thinking is done by a model you choose and pay for. BestROM runs
+    no endpoint and receives nothing. Agent mode > Brain takes a base
+    URL, a key and a model name, with presets for the usual providers
+    and for a llama.cpp or Ollama server on your own network, which
+    sends nothing off your LAN at all. What a task sees on the screen
+    goes to that endpoint while it runs, and the task screen names the
+    endpoint while it does.
+  * Your key is sealed by the phone's keystore and only usable while the
+    device is unlocked. It is never logged, never shown back to you and
+    not in a backup. Plain HTTP is allowed only on your own network;
+    everywhere else https is required.
+  * Before anything that changes something it asks - what it is about to
+    do and to what, with Allow, Deny, and Allow all for this task.
+    Reading the screen never asks. The switch that turns the asking off
+    lives inside one task and is off by default.
+  * Some things it will not do whatever you allow: change a lock screen,
+    bootloader, developer or accessibility setting; open a payment or
+    password app your task never mentioned; type into a password field;
+    or touch itself. Those are refused by the phone, not judged by the
+    model, as is acting while the phone is locked or in your hand.
+  * What is on screen is treated as data, never as an instruction, and
+    text pretending to be a system message is neutralised before the
+    model reads it. That makes the obvious attacks harder; it does not
+    make the agent immune to being talked into something it may do.
+  * Every task has a step and token limit you can change, and a
+    notification says what it is doing and carries Stop. The activity
+    log records each call and each refusal, never your text and never
+    what was on screen.
+  * Turning it on shows a six-digit code you type on the computer to
+    pair. It can be set as the digital assistant and reached by holding
+    power, but neither is set for you, and a task only ever starts from
+    text you typed in yourself.
+  * Settings and the launcher publish the functions Android 17 built
+    into them, so an agent can read battery, storage, data usage,
+    notification and app state and change settings the way Settings
+    does. Two apps excluded on the Agent mode screen were still
+    reachable through those functions; both are refused now.
+
+Edge gestures
+  * An edge-gesture app is preloaded: swipe gestures along the screen
+    edges, hardware key remapping, a pie menu, side panels, a freezer
+    drawer and clipboard history. Nothing happens until you open it and
+    assign a gesture, and the settings live in its own app.
+  * It is a native port of EdgeX, which is an Xposed module. This build
+    runs the same code without Xposed: the system loads it and calls it
+    from the input path. It is GPL-3.0.
+
+Ad and tracker blocking
+  * A DNS-level ad, tracker and malware blocker is now part of the ROM
+    and is on out of the box. It works inside the system resolver, so it
+    needs no root, does not take the VPN slot, and Private DNS does not
+    get around it.
+  * An optional deep mode adds coverage for apps that go around the
+    system resolver. It is off by default and it does take the VPN slot,
+    which it says before you turn it on.
+  * It cannot block everything. The app is explicit about its limits
+    rather than quiet about them.
+
+Browser engine (WebView)
+  * The system WebView - the engine every app uses to show a web page -
+    is Cromite's build (148.0.7778.168) instead of the AOSP Chromium
+    prebuilt. It keeps the AOSP package name, so nothing else changes,
+    and it has no variations-seed, metrics-upload or component-updater
+    endpoints, so the services that would talk to Google do nothing.
+  * Two costs, stated plainly because they are the trade being made:
+    WebView no longer receives certificate-revocation (CRLSet) updates
+    between ROM releases, and this build is four Chrome majors behind
+    the prebuilt it replaces (152.0.7977.64).
+  * It is built from BestROM's own fork of Cromite rather than taken
+    from uazo's release, because of a crash: Cromite ships a Chromium
+    self-check that, inside another app's process, ends as a crash of
+    that app. On Android 17 it fired while browsing, so Via and the
+    licence viewer in Settings died within seconds. The fork turns it
+    off for WebView, as upstream WebView does.
+
+Keyboard
+  * LeanType 4.2.0, LeanBit Lab's HeliBoard fork, replaces the AOSP
+    keyboard, and it opens at full size: upstream defaults to 77% height
+    and 15% side padding, this build to 100% of both. The Appearance
+    sliders still work, and anyone who has moved either keeps it.
+  * Because that is a fork build it is signed with the ROM key, so the
+    keyboard updates by OTA only: an F-Droid or GitHub install is
+    refused for a signature mismatch, and its own in-app updater cannot
+    install anything on a system build.
+  * It brings its own spell checker, and the phone now picks a keyboard
+    on first boot when none is set.
+  * It is not a privileged app and asks for camera, microphone, contacts
+    and image access only where a feature needs them, so nothing is
+    granted until you use it. Its cloud proofreading does nothing until
+    you paste a key of your own.
+  * It is 57 MB installed against the AOSP keyboard's 22 MB; with the
+    WebView, /product grows about 69 MB. LeanType is GPL-3.0, built from
+    github.com/Mohithash/LeanType branch bestrom-17.
+
+Look and feel
+  * A monochrome, true-black system theme is the default. Material You
+    generates its palette without colour, and in dark mode the page and
+    the lowest surface are pure black. "Pure black" under Settings >
+    Display > Dark theme is on out of the box: the same switch as
+    before, and it still turns everything back to the tonal dark greys.
+  * Two fonts ship with the ROM, both SIL Open Font License 1.1: Space
+    Grotesk for anything you read, and Doto, a dot-matrix face, for the
+    lock and always-on clock. The font picker still overrides the body
+    font; the clock stays dot-matrix.
+  * No window blur anywhere: the shade, the app-launch transition and
+    window backgrounds draw flat, and the app drawer is opaque instead
+    of translucent. Quick settings tiles are full pills when they are
+    on, notification cards are tighter, animation scales stay at 1.0x.
+  * Settings looks like BestROM now: a BESTROM line with the ROM
+    version, a dot-matrix Settings title, a search pill and a card for
+    the phone itself. Every row is its own rounded card, the coloured
+    icon circles are gone, and each row shows the first letter of its
+    own name in a thin outlined ring. Battery, Storage and Custom
+    Tweaks show charge, space used and the ROM version.
+  * The dark greys in Settings are deliberate: the hint text, the row
+    values and the letter rings sit below the usual contrast, and light
+    mode keeps the standard colours.
+
+Branding
+  * The Updater's banner is BestROM's own mark instead of the gold
+    VoltageOS wordmark, and the status bar's ongoing-activity chip draws
+    the BestROM dot-matrix mark instead of another ROM's logo. The
+    Updater's current-build chip shows 3.0 and the About phone version
+    row shows the full build id, both read from a BestROM property
+    rather than the VoltageOS platform version.
+  * Custom Tweaks no longer fetches a Play Integrity profile from
+    VoltageOS's GitHub. The auto-updated pifsync source stays, so the
+    feature is unchanged apart from where the profile comes from.
+
+Camera
+  * MiuiCamera is the camera again. Aperture is dropped.
+  * Fixed: photos taken with MiuiCamera did not appear in the gallery.
+    An Android 17 change had killed the permission rules the MiuiCamera
+    add-on writes, including the one the camera hardware needs to report
+    a finished shot, so every shot timed out at 24 seconds.
+
+Files
+  * MiXplorer 6.71.15 is preloaded alongside Via as a normal, removable
+    user app, installed once on first boot. It is the author's own
+    build, shipped unmodified and signed by him, as his terms require.
+    Grant it All files access on first run; it asks for no camera,
+    location, microphone or contacts permission. Archive formats past
+    ZIP need his MiX Archive add-on, which is not bundled.
+
+Removed
+  * The AOSP Chromium WebView, the AOSP keyboard and Aperture are gone,
+    replaced by Cromite's WebView, LeanType and MiuiCamera.
+
+
 3.0-peridot-20260907-1010-OFFICIAL
 ==================================
 
