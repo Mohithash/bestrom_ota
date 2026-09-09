@@ -1,166 +1,248 @@
 3.0-peridot-20260908-2346-OFFICIAL
 ==================================
 
-Changes since 2026-09-07-1010
------------------------------
-This note covers everything new since the 2026-09-07-1010 release.
+Changes since 3.0-peridot-20260907-1010-OFFICIAL
 
-Agent mode
-  * BestROM can now carry out a task you type, on its own, with nothing
-    plugged in: Settings > Custom Tweaks > Advanced > Agent mode. It
-    reads the screen, decides the next step and does it, one step at a
-    time, until it is done or you stop it. A computer can drive the same
-    bridge over adb.
-  * It is off by default, and while it is off it costs nothing: no
-    service, no process, nothing at boot. It turns itself off again when
-    the phone restarts - it does not survive a reboot.
-  * The thinking is done by a model you choose and pay for. BestROM runs
-    no endpoint and receives nothing. Agent mode > Brain takes a base
-    URL, a key and a model name, with presets for the usual providers
-    and for a llama.cpp or Ollama server on your own network, which
-    sends nothing off your LAN at all. What a task sees on the screen
-    goes to that endpoint while it runs, and the task screen names the
-    endpoint while it does.
-  * Your key is sealed by the phone's keystore and only usable while the
-    device is unlocked. It is never logged, never shown back to you and
-    not in a backup. Plain HTTP is allowed only on your own network;
-    everywhere else https is required.
-  * Before anything that changes something it asks - what it is about to
-    do and to what, with Allow, Deny, and Allow all for this task.
-    Reading the screen never asks. The switch that turns the asking off
-    lives inside one task and is off by default.
-  * Some things it will not do whatever you allow: change a lock screen,
-    bootloader, developer or accessibility setting; open a payment or
-    password app your task never mentioned; type into a password field;
-    or touch itself. Those are refused by the phone, not judged by the
-    model, as is acting while the phone is locked or in your hand.
-  * What is on screen is treated as data, never as an instruction, and
-    text pretending to be a system message is neutralised before the
-    model reads it. That makes the obvious attacks harder; it does not
-    make the agent immune to being talked into something it may do.
-  * Every task has a step and token limit you can change, and a
-    notification says what it is doing and carries Stop. The activity
-    log records each call and each refusal, never your text and never
-    what was on screen.
-  * Turning it on shows a six-digit code you type on the computer to
-    pair. It can be set as the digital assistant and reached by holding
-    power, but neither is set for you, and a task only ever starts from
-    text you typed in yourself.
-  * Settings and the launcher publish the functions Android 17 built
-    into them, so an agent can read battery, storage, data usage,
-    notification and app state and change settings the way Settings
-    does. Two apps excluded on the Agent mode screen were still
-    reachable through those functions; both are refused now.
+device/xiaomi/peridot
+   * peridot: Turn off window blur
+   * overlay: BestROM type system and dark defaults
+   * overlay: Pill QS tiles and tighter notifications
+   * peridot: Stamp the BestROM version into mtdoops
+   * peridot: Drop GameSpace from the debloat list
+   * peridot: Hold a black screen through shutdown
 
-Edge gestures
-  * An edge-gesture app is preloaded: swipe gestures along the screen
-    edges, hardware key remapping, a pie menu, side panels, a freezer
-    drawer and clipboard history. Nothing happens until you open it and
-    assign a gesture, and the settings live in its own app.
-  * It is a native port of EdgeX, which is an Xposed module. This build
-    runs the same code without Xposed: the system loads it and calls it
-    from the input path. It is GPL-3.0.
-
-Ad and tracker blocking
-  * A DNS-level ad, tracker and malware blocker is now part of the ROM
-    and is on out of the box. It works inside the system resolver, so it
-    needs no root, does not take the VPN slot, and Private DNS does not
-    get around it.
-  * An optional deep mode adds coverage for apps that go around the
-    system resolver. It is off by default and it does take the VPN slot,
-    which it says before you turn it on.
-  * It cannot block everything. The app is explicit about its limits
-    rather than quiet about them.
-
-Browser engine (WebView)
-  * The system WebView - the engine every app uses to show a web page -
-    is Cromite's build (148.0.7778.168) instead of the AOSP Chromium
-    prebuilt. It keeps the AOSP package name, so nothing else changes,
-    and it has no variations-seed, metrics-upload or component-updater
-    endpoints, so the services that would talk to Google do nothing.
-  * Two costs, stated plainly because they are the trade being made:
-    WebView no longer receives certificate-revocation (CRLSet) updates
-    between ROM releases, and this build is four Chrome majors behind
-    the prebuilt it replaces (152.0.7977.64).
-  * It is built from BestROM's own fork of Cromite rather than taken
-    from uazo's release, because of a crash: Cromite ships a Chromium
-    self-check that, inside another app's process, ends as a crash of
-    that app. On Android 17 it fired while browsing, so Via and the
-    licence viewer in Settings died within seconds. The fork turns it
-    off for WebView, as upstream WebView does.
-
-Keyboard
-  * LeanType 4.2.0, LeanBit Lab's HeliBoard fork, replaces the AOSP
-    keyboard, and it opens at full size: upstream defaults to 77% height
-    and 15% side padding, this build to 100% of both. The Appearance
-    sliders still work, and anyone who has moved either keeps it.
-  * Because that is a fork build it is signed with the ROM key, so the
-    keyboard updates by OTA only: an F-Droid or GitHub install is
-    refused for a signature mismatch, and its own in-app updater cannot
-    install anything on a system build.
-  * It brings its own spell checker, and the phone now picks a keyboard
-    on first boot when none is set.
-  * It is not a privileged app and asks for camera, microphone, contacts
-    and image access only where a feature needs them, so nothing is
-    granted until you use it. Its cloud proofreading does nothing until
-    you paste a key of your own.
-  * It is 57 MB installed against the AOSP keyboard's 22 MB; with the
-    WebView, /product grows about 69 MB. LeanType is GPL-3.0, built from
-    github.com/Mohithash/LeanType branch bestrom-17.
-
-Look and feel
-  * A monochrome, true-black system theme is the default. Material You
-    generates its palette without colour, and in dark mode the page and
-    the lowest surface are pure black. "Pure black" under Settings >
-    Display > Dark theme is on out of the box: the same switch as
-    before, and it still turns everything back to the tonal dark greys.
-  * Two fonts ship with the ROM, both SIL Open Font License 1.1: Space
-    Grotesk for anything you read, and Doto, a dot-matrix face, for the
-    lock and always-on clock. The font picker still overrides the body
-    font; the clock stays dot-matrix.
-  * No window blur anywhere: the shade, the app-launch transition and
-    window backgrounds draw flat, and the app drawer is opaque instead
-    of translucent. Quick settings tiles are full pills when they are
-    on, notification cards are tighter, animation scales stay at 1.0x.
-  * Settings looks like BestROM now: a BESTROM line with the ROM
-    version, a dot-matrix Settings title, a search pill and a card for
-    the phone itself. Every row is its own rounded card, the coloured
-    icon circles are gone, and each row shows the first letter of its
-    own name in a thin outlined ring. Battery, Storage and Custom
-    Tweaks show charge, space used and the ROM version.
-  * The dark greys in Settings are deliberate: the hint text, the row
-    values and the letter rings sit below the usual contrast, and light
-    mode keeps the standard colours.
-
-Branding
-  * The Updater's banner is BestROM's own mark instead of the gold
-    VoltageOS wordmark, and the status bar's ongoing-activity chip draws
-    the BestROM dot-matrix mark instead of another ROM's logo. The
-    Updater's current-build chip shows 3.0 and the About phone version
-    row shows the full build id, both read from a BestROM property
-    rather than the VoltageOS platform version.
-  * Custom Tweaks no longer fetches a Play Integrity profile from
-    VoltageOS's GitHub. The auto-updated pifsync source stays, so the
-    feature is unchanged apart from where the profile comes from.
-
-Camera
-  * MiuiCamera is the camera again. Aperture is dropped.
-  * Fixed: photos taken with MiuiCamera did not appear in the gallery.
-    An Android 17 change had killed the permission rules the MiuiCamera
-    add-on writes, including the one the camera hardware needs to report
-    a finished shot, so every shot timed out at 24 seconds.
-
-Files
-  * MiXplorer 6.71.15 is preloaded alongside Via as a normal, removable
-    user app, installed once on first boot. It is the author's own
-    build, shipped unmodified and signed by him, as his terms require.
-    Grant it All files access on first run; it asks for no camera,
-    location, microphone or contacts permission. Archive formats past
-    ZIP need his MiX Archive add-on, which is not bundled.
-
-Removed
-  * The AOSP Chromium WebView, the AOSP keyboard and Aperture are gone,
-    replaced by Cromite's WebView, LeanType and MiuiCamera.
+vendor/bestrom
+   * vendor: Add the BestROM MCP server
+   * vendor: Document the tree for agents (AGENTS.md)
+   * manifest: Copy AGENTS.md and .mcp.json to the root
+   * manifest: Use the migrated repo names and branch 17
+   * vendor: Document how to get the source
+   * vendor: Ship Cromite as the system WebView
+   * vendor: Replace LatinIME with LeanType
+   * vendor: update changelog for WebView and keyboard
+   * vendor: Default LeanType to full keyboard size
+   * vendor: Preinstall MiXplorer as a removable app
+   * vendor: Fetch the Cromite WebView at build time
+   * vendor: Skip release signing for the preloads
+   * vendor: Record the MiXplorer preload grant
+   * vendor: Document LeanType size, network and source
+   * vendor: Ship Doto and Space Grotesk
+   * config: Set org.bestrom.version to the ROM version
+   * vendor: Note the Settings restyle in the changelog
+   * manifest: Drop GameSpace
+   * tools: Accept repo-local commit areas
+   * manifest: Track the sepolicy fork
+   * vendor: Note that the LeanType fork is public
+   * vendor: Ship the Edge gesture app
+   * manifest: Track the Edge app
+   * vendor: Turn on the Settings device-state app functions
+   * vendor: Ship BestromAgent
+   * vendor: Add the Agent mode MCP tools
+   * vendor: Document driving the phone
+   * vendor: Take the WebView from the BestROM Cromite fork
+   * tools: Match the agent bridge wire format
+   * tools: Redact the agent pairing code
+   * tools: Say what Agent mode really refuses
+   * tools: Follow the bridge's final error surface
+   * tools: Narrow the denylist claim in the README
+   * tools: Accept BestromAgent as a commit area
+   * vendor: Note the on-device agent runner
+   * vendor: Correct the Agent mode notes
+   * vendor: Wire up Nullroute
+   * manifest: Track the resolver fork
+   * manifest: Track the system/core fork
+   * manifest: Track the Dialer on the BestROM fork
+   * vendor: Ship the Nullroute app
+frameworks/base
+   * base: enforce the hide developer status list
+   * base: spoof ADB system properties for hide-developer-status apps
+   * base: Hide the adb-disabled flag from spoofed apps
+   * FontController: drop regex from the create path
+   * SettingsProvider: allow seeding pure black
+   * SystemUI: monochrome palette and black surfaces
+   * SystemUI: Use the BestROM mark in the logo chip
+   * base: Skip the developer-status check when isolated
+   * SystemUI: Give a new keyguard clock the current time zone
+   * base: Drop the GameSpace manager service
+   * frameworks/base: Add the Edge input hook surface
+   * SystemUI: Add a charging bolt to the text battery
+   * frameworks/base: Log when the Edge input hook is armed
+packages/apps/Settings
+   * Settings: remove the dead app backup row
+   * Settings: read ro.bestrom.build.status again
+   * Settings: restore legal category in About phone
+   * Settings: Add the BestROM homepage resources
+   * Settings: Restyle the homepage search bar
+   * Settings: Add a BestROM header to the homepage
+   * Settings: Fork the homepage row layout
+   * Settings: Give each homepage row its own card
+   * Settings: Show values on homepage rows
+   * Settings: Add a device card to the homepage
+   * Settings: Use the ROM row style on sub-pages
+   * Settings: Show the BestROM version on About phone
+   * Settings: Drop the unused Powerhub icon
+   * Settings: Return after the device-state keyguard refusal
+packages/apps/SetupWizard
+   * SetupWizard: Fix the Updater package name
+packages/apps/Updater
+   * Updater: Replace the VoltageOS banner
+packages/apps/Launcher3
+   * Launcher3: Opaque app drawer by default
+   * Launcher3: Generate the app functions index xml
+packages/apps/Dialer
+   * Dialer: Let a call carry a note
+   * Dialer: Add a reverse lookup provider the user points
+device/voltage/sepolicy
+   * sepolicy: Add the Nullroute policy
+   * sepolicy: Keep the nullroute index path out of m4
+kernel/xiaomi/sm8635
+   * README: Note the DRM clones revert, ReSukiSU bump and QRTR caps in 2.8
+packages/apps/Edge
+   * Edge: Import EdgeX a0d415a
+   * Edge: Build as a BestROM system app
+   * Edge: Drop the premium and update-check surface
+   * Edge: Replace the Xposed hooks with the framework hook surface
+   * Edge: Harden the system_server half of the port
+   * Edge: Remove leftovers of the dropped features
+   * Edge: Drop every root path
+   * Edge: Follow the BestROM palette and row style
+   * Edge: Give the BestROM preset an overlay colour
+   * Edge: Stop telling the user to check root
+   * Edge: Restart SystemUI from system_server
+   * Edge: Make the app look like a ROM feature
+   * Edge: Replace the launcher icon
+   * Edge: Stop dropping every event we are handed
+   * Edge: Keep the shortcut picker working after an update
+packages/apps/BestromAgent
+   * BestromAgent: Add the app skeleton
+   * BestromAgent: Add the bridge and the accessibility half
+   * BestromAgent: Add the settings screen and the audit log
+   * BestromAgent: Stop promising controls the platform lacks
+   * BestromAgent: Authenticate the socket peer
+   * BestromAgent: Harden pairing and the audit log
+   * BestromAgent: Close the launch and settings entry surfaces
+   * BestromAgent: Align the wire format with the host
+   * BestromAgent: Refuse excluded packages in app functions and launches
+   * BestromAgent: Add the OpenAI-compatible brain client
+   * BestromAgent: Add the tool surface the model sees
+   * BestromAgent: Add the action policy
+   * BestromAgent: Add the task runner
+   * BestromAgent: Add the task screen
+   * BestromAgent: Add the assistant entry and the brain settings
+   * BestromAgent: Document the runner, the brain and what is not defended
+   * BestromAgent: Reset the stuck counters when the screen moves
+   * BestromAgent: Parse the endpoint with the platform
+   * BestromAgent: Keep app names out of the system role
+   * BestromAgent: Make the envelope unforgeable
+   * BestromAgent: Refuse sensitive screens by tap as well
+   * BestromAgent: Allow cleartext only to private addresses
+   * BestromAgent: Keep the task screen to the phone
+   * BestromAgent: Re-read the screen when the tree goes stale
+   * BestromAgent: Compact screens and screenshots alike
+   * BestromAgent: Tighten stop, restart and small edges
+   * BestromAgent: Strengthen the host tests
+build/soong
+   * soong: Say ninja in the start status
+frameworks/av
+   * codec2: Survive a store that dies while being reached
+vendor/voltage
+   * fonts: Add Space Grotesk and Doto families
+   * AndroidBlackTheme: Keep the surface ramp monotonic
+   * config: Move org.bestrom.version to vendor/bestrom
+   * fonts: Correct the Doto family note
+   * config: Stop shipping GameSpace
+   * vendor: Drop etc/hosts from the addon.d survival list
+packages/apps/ParanoidSense
+   * FaceUnlock: Drop the dead jar entry and jarjar rule
+packages/apps/BestromPreinstaller
+   * BestromPreinstaller: Seed the default keyboard
+   * BestromPreinstaller: Retry a failed install
+packages/apps/Powerhub
+   * Powerhub: hide weather link without OmniJaws
+   * Powerhub: fix crash when leaving mid-fetch
+   * Powerhub: add Hide Developer Status app picker
+   * Powerhub: Drop the VoltageOS PIF source
+   * Powerhub: Add the Agent mode entry
+   * Powerhub: Add the Ask the agent entry
+   * Powerhub: Put the Agent mode rows on a screen that renders
+packages/apps/Nullroute
+   * Nullroute: Add the NRDX on-disk index format
+   * Nullroute: Add hostname canonicalization and the matcher
+   * Nullroute: Add the blocklist parser and suffix collapse
+   * Nullroute: Add the index serializer and rule-text sidecar
+   * Nullroute: Add index mapping and control-page accessors
+   * Nullroute: Add the resolver filter and hooks
+   * Nullroute: Add the DNS wire codec and raw-query hook
+   * Nullroute: Add the JNI bridge
+   * Nullroute: Add nrctl and the boot seeder
+   * Nullroute: Add fuzz targets and the host test harness
+   * Nullroute: Add the app core, data layer and update pipeline
+   * Nullroute: Add the query log and breakage notifier
+   * Nullroute: Add list importers and configuration export
+   * Nullroute: Add Deep mode
+   * Nullroute: Add the user interface
+   * Nullroute: Add the baked hosts floor and blocklist profiles
+   * Nullroute: Add SELinux policy, init and privileged permissions
+   * Nullroute: Add build files
+   * Nullroute: Add the verification gates
+   * Nullroute: Add documentation
+   * Nullroute: Add the Phase 2 rules, query and per-app screens
+   * Nullroute: Add the query log, settings and onboarding screens
+   * Nullroute: Add CNAME uncloaking
+   * Nullroute: Add the Deep mode screen, self-test and remaining CLI verbs
+   * Nullroute: Wire the new screens into navigation
+   * Nullroute: Add resources for the new screens
+   * Nullroute: Fix the log row badge type and complete the fuzz gate
+   * Nullroute: Harden the netd-side code against a hostile index
+   * native: Build the app-side natives on this tree
+   * app: Set the baked-in version code
+   * rom: Fix two ways the SELinux fragments failed on a real tree
+   * tools: Check the addon.d script the tree actually has
+   * app: Add the index build package
+packages/modules/DnsResolver
+   * resolv: Add the Nullroute filter hooks
+   * resolv: Refresh the Nullroute filter sources
+system/core
+   * init: stop fabricating sys.oem_unlock_allowed in the SafetyNet spoof
+   * base: enforce the hide developer status list
+   * base: spoof ADB system properties for hide-developer-status apps
+   * base: Hide the adb-disabled flag from spoofed apps
+   * FontController: drop regex from the create path
+   * SettingsProvider: allow seeding pure black
+   * SystemUI: monochrome palette and black surfaces
+   * SystemUI: Use the BestROM mark in the logo chip
+   * base: Skip the developer-status check when isolated
+   * SystemUI: Give a new keyguard clock the current time zone
+   * base: Drop the GameSpace manager service
+   * frameworks/base: Add the Edge input hook surface
+   * SystemUI: Add a charging bolt to the text battery
+   * frameworks/base: Log when the Edge input hook is armed
+   * Settings: remove the dead app backup row
+   * Settings: read ro.bestrom.build.status again
+   * Settings: restore legal category in About phone
+   * Settings: Add the BestROM homepage resources
+   * Settings: Restyle the homepage search bar
+   * Settings: Add a BestROM header to the homepage
+   * Settings: Fork the homepage row layout
+   * Settings: Give each homepage row its own card
+   * Settings: Show values on homepage rows
+   * Settings: Add a device card to the homepage
+   * Settings: Use the ROM row style on sub-pages
+   * Settings: Show the BestROM version on About phone
+   * Settings: Drop the unused Powerhub icon
+   * Settings: Return after the device-state keyguard refusal
+   * Launcher3: Opaque app drawer by default
+   * Launcher3: Generate the app functions index xml
+   * init: stop fabricating sys.oem_unlock_allowed in the SafetyNet spoof
+   * soong: Say ninja in the start status
+   * sepolicy: Add the Nullroute policy
+   * sepolicy: Keep the nullroute index path out of m4
+   * fonts: Add Space Grotesk and Doto families
+   * AndroidBlackTheme: Keep the surface ramp monotonic
+   * config: Move org.bestrom.version to vendor/bestrom
+   * fonts: Correct the Doto family note
+   * config: Stop shipping GameSpace
+   * vendor: Drop etc/hosts from the addon.d survival list
 
 
 3.0-peridot-20260907-1010-OFFICIAL
