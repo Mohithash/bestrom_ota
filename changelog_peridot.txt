@@ -25,6 +25,33 @@ HAL rename audit
     powershare. Touch remains fully vendor.bestrom.touch.
 
 
+3.0-peridot-20260911-1758-OFFICIAL
+==================================
+
+Charging speed
+  * Sepolicy labels vendor.lineage.health (and bestrom aliases) so
+    Settings → Battery → Charging speed binds. Modes match peridot:
+    Slow=0, Fast=1 (default), Super=2.
+  * FastChargeController retries waitForDeclaredService if the HAL
+    races at boot.
+
+Input / gestures
+  * Goodix edge filter stays off outside game mode.
+  * Edge TOP-only claim; BestromAgent canPerformGestures=false;
+    gestural back inset 8dp.
+
+Upstream (VoltageOS 17)
+  * Platform security patch 2026-09-01.
+  * Settings and frameworks/base security hardening (intent redirect,
+    PduParser, URI grants, credential flows).
+  * Skipped: GameSpace, default wallpaper, ParanoidSense voltageos
+    rename (kept com.bestrom.faceunlock).
+
+HAL rename audit
+  * Dual lineage+bestrom service/file contexts for health, livedisplay,
+    powershare. Touch remains fully vendor.bestrom.touch.
+
+
 3.0-peridot-20260911-1320-OFFICIAL
 ==================================
 
