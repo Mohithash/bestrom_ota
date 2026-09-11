@@ -1,3 +1,33 @@
+3.0-peridot-20260911-1320-OFFICIAL
+==================================
+
+Touch and Edge
+  * Goodix: keep the firmware edge filter off outside game mode (same
+    as FocalTech). Level 2 in normal mode rejected near-bezel horizontal
+    motion and broke Telegram/WhatsApp swipe-to-reply on Goodix panels.
+  * Edge is shipped again. Left, right and bottom edges always
+    passthrough continuous touches; only the top edge may claim. The
+    global input filter arms only when a top zone is assigned and the
+    IME is not visible.
+  * EdgeLoader skips when persist.bestrom.edge.disable=1 or the package
+    is disabled, and disarms the input hook.
+  * Gestural back inset is 8dp (was 30dp / 90px). FrameworkOverlayPeridot
+    is product_specific so it can win over the gestural overlay.
+  * BestromAgent no longer requests canPerformGestures, which armed a
+    device-wide AccessibilityInputFilter.
+
+SystemUI and display
+  * Do not cancel the keyguard exit animation when the shade expands;
+    that left a stuck KEYGUARD shade over the resumed app.
+  * SurfaceFlinger touch boost 300 ms; content-detection refresh-rate
+    voting off (was parking the panel at 60 Hz).
+
+Boot / charge
+  * Default thermal profile is idle (0), not mgame (19). Charge limits
+    clear after boot_complete. Optical UDFPS props are forced so a dirty
+    flash cannot leave an ultrasonic overlay armed.
+
+
 3.0-peridot-20260909-0059-OFFICIAL
 ==================================
 

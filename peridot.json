@@ -1,15 +1,15 @@
 {
   "response": [
     {
-      "datetime": 1788915368,
-      "filename": "BestROM-3.0-peridot-20260909-0059-OFFICIAL.zip",
-      "id": "f2d844982eec01cf0818770000886e81acbd1b03e3c2891198254fa66fc2abe4",
+      "datetime": 1789132729,
+      "filename": "BestROM-3.0-peridot-20260911-1320-OFFICIAL.zip",
+      "id": "e6b28be09d111e3847486ca35edbaf251eb7b8a1211aa34f7633b5ce3e56535a",
       "romtype": "official",
-      "size": 2827662571,
-      "url": "https://downloads.sourceforge.net/project/bestrom/peridot/BestROM-3.0-peridot-20260909-0059-OFFICIAL.zip",
+      "size": 2835770615,
+      "url": "https://downloads.sourceforge.net/project/bestrom/peridot/BestROM-3.0-peridot-20260911-1320-OFFICIAL.zip",
       "version": "3.0",
-      "download": "https://downloads.sourceforge.net/project/bestrom/peridot/BestROM-3.0-peridot-20260909-0059-OFFICIAL.zip",
-      "timestamp": 1788915368
+      "download": "https://downloads.sourceforge.net/project/bestrom/peridot/BestROM-3.0-peridot-20260911-1320-OFFICIAL.zip",
+      "timestamp": 1789132729
     }
   ]
 }
