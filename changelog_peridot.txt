@@ -1,3 +1,23 @@
+3.0-peridot-20260912-0407-OFFICIAL
+==================================
+
+Input method
+  * LeanType no longer crashes when the suggestion strip is not created
+    yet. A selection update used to kill the keyboard.
+
+Nullroute
+  * The boot seeder now decodes the baked baseline. Filtering was staying
+    off (nobaseline / nomap) on every boot.
+
+Edge
+  * Auto Game Mode when a game is in front: Edge gestures mute and the
+    global input filter disarms. Leaving the game clears only the auto hold.
+
+UI
+  * Cards, type and QS pills follow one BestROM chrome: 22dp cards,
+    Space Grotesk, Doto for the clock, pill tile radii.
+
+
 3.0-peridot-20260911-1758-OFFICIAL
 ==================================
 
